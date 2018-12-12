@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\parallelraytracer\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{DA5BC535-702A-35C4-872E-7603A9D9FF61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

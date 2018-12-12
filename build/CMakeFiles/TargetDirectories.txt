@@ -1,0 +1,4 @@
+//bournemouth.ac.uk/data/Student/Home/SciTech/s4922815/Desktop/RayTracer_JasmineBennett_s4922815/build/CMakeFiles/parallelraytracer.dir
+//bournemouth.ac.uk/data/Student/Home/SciTech/s4922815/Desktop/RayTracer_JasmineBennett_s4922815/build/CMakeFiles/tracer.dir
+//bournemouth.ac.uk/data/Student/Home/SciTech/s4922815/Desktop/RayTracer_JasmineBennett_s4922815/build/CMakeFiles/ALL_BUILD.dir
+//bournemouth.ac.uk/data/Student/Home/SciTech/s4922815/Desktop/RayTracer_JasmineBennett_s4922815/build/CMakeFiles/ZERO_CHECK.dir

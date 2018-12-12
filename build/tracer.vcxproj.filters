@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Geometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Ray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Tracer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Sphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Tracer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\source\tracer\Sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="\\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{0BC0EA07-A8E6-3044-A334-7E89E279F7CE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{DA5BC535-702A-35C4-872E-7603A9D9FF61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

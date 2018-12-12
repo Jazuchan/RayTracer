@@ -26,7 +26,7 @@ glm::vec3 Tracer::RayTracer(std::shared_ptr<Ray> _ray)
 			if (m_reflect < 1)
 			{
 				_ray->m_ori = m_interPoint;	
-				_ray->m_dir = m_closestSphere->Reflection(m_interPoint);
+				_ray->m_dir = m_closestSphere->Reflection(m_result.m_intersectPoint);
 				m_col += RayTracer(_ray);
 
 				/*_ray->m_ori = m_interPoint;

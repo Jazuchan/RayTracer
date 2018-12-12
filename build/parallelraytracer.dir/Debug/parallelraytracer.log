@@ -1,0 +1,12 @@
+﻿  '\\bournemouth.ac.uk\data\student\home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\build'
+  CMD.EXE was started with the above path as the current directory.
+  UNC paths are not supported.  Defaulting to Windows directory.
+  Building Custom Rule //bournemouth.ac.uk/data/Student/Home/SciTech/s4922815/Desktop/RayTracer_JasmineBennett_s4922815/CMakeLists.txt
+  CMake does not need to re-run because //bournemouth.ac.uk/data/Student/Home/SciTech/s4922815/Desktop/RayTracer_JasmineBennett_s4922815/build/CMakeFiles/generate.stamp is up-to-date.
+  main.cpp
+\\bournemouth.ac.uk\data\student\home\scitech\s4922815\desktop\raytracer_jasminebennett_s4922815\source\parallelraytracer\main.cpp(70): warning C4244: 'argument': conversion from 'T' to 'Uint8', possible loss of data
+          with
+          [
+              T=float
+          ]
+  parallelraytracer.vcxproj -> \\bournemouth.ac.uk\data\Student\Home\SciTech\s4922815\Desktop\RayTracer_JasmineBennett_s4922815\build\Debug\parallelraytracer.exe
