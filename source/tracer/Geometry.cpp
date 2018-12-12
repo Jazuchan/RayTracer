@@ -58,13 +58,13 @@ Intersect Geometry::RayIntersect(std::shared_ptr<Ray> _ray, glm::vec3 _cen, floa
 
 
 	//((p-a).n)
-	float m_project = glm::dot(m_oriCen - _ray->m_ori, m_dir);
+	float m_project = glm::dot(m_oriCen, m_dir);
 
 	//d
 	float m_dis = glm::length(m_oriCen - (m_project) * m_dir);
 
 
-	glm::vec3 m_x  = Point(_ray, _cen);
+	//glm::vec3 m_x  = Point(_ray, _cen);
 
 	if (m_dis > _radi)
 	{
