@@ -17,7 +17,7 @@ public:
 	
 	Camera();
 	Camera(SDL_Renderer* _renderer, int _width, int _height);  ///< contains the matrix calculations
-	bool Update();  ///<contains the matrix update
+	//bool Update();  ///<contains the matrix update
 	void SceneCol();
 	std::shared_ptr<Ray> PixCood(glm::ivec2 _pair);
 	
@@ -30,7 +30,6 @@ public:
 	int m_windowH = 800;
 	SDL_Renderer* m_renderer;
 	SDL_Window* m_window;
-	bool m_running = true;
 	unsigned int m_lastTime = SDL_GetTicks();
 	unsigned int m_curr = SDL_GetTicks();
 	float m_deltaTime;

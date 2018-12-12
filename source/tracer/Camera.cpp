@@ -19,26 +19,17 @@ Camera::Camera(SDL_Renderer* _renderer, int _width, int _height)
 
 }
 
-bool Camera::Update()
-{
-	SceneCol();//0, 255, 200);
-
-	SDL_Event m_event = { 0 };
-
-	while (SDL_PollEvent(&m_event))
-	{
-		if (m_event.type == SDL_QUIT)
-		{
-			m_running = false;
-		}
-
-	}
-
-	m_deltaTime = (float)(m_curr - m_lastTime) / 1000.0f;
-	m_lastTime = m_curr;
-		
-	return m_running;
-}
+//bool Camera::Update()
+//{
+//	SceneCol();//0, 255, 200);
+//
+//	
+//	m_deltaTime = (float)(m_curr - m_lastTime) / 1000.0f;
+//	m_lastTime = m_curr;
+//		
+//
+//	return true;
+//}
 
 void Camera::SceneCol()//int _red, int _green, int _blue)
 {

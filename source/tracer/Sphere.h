@@ -28,23 +28,13 @@ public:
 
 	glm::vec3 Normal(glm::vec3 _pi);
 
-	glm::vec3 Reflection(Tracer& _tracer,  glm::vec3(_intersect), int a);
-
-	glm::vec3 Shadows(std::shared_ptr<Ray> _ray, glm::vec3(_intersect));
-
-//	glm::vec3 m_lightDir;
-
-//	glm::vec3 m_reflectionVec;
-//	glm::vec3 m_shadowVec;
-//	glm::vec3 m_rayDirect;
-//	glm::vec3 reflecCol;
+	//glm::vec3 Shadows(std::shared_ptr<Ray> _ray, glm::vec3(_intersect));
 
 private:
 
 	glm::vec3 m_pos;
 	glm::vec3 m_col;
 	float m_radi;
-
 
 };
 #endif

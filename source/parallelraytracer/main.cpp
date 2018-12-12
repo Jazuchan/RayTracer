@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
+#include <thread>
 
 #include "tracer/Camera.h"
 #include "tracer/Geometry.h"
@@ -9,10 +10,49 @@
 #include "tracer/Sphere.h"
 #include "tracer/Tracer.h"
 
+// Pass in the sections of the screen to draw (E.G. 0, 0, ScreenWidth / 2, ScreenHeight / 2)
+//void Dud( int _startY, int , int _endY)
+//{
+//	for (int x = _startX; x < _endX; x++)
+//	{
+//		for (int y = _startY; y < _endY; y++)
+//		{
+//			// Draw
+//		}
+//	}
+//}
+
+void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, int _endX, int _endY, SDL_Renderer* _renderer, int _startX, int _startY)
+{
+	time_t start, finish;  //time then the threading starts and finished
+
+	//while (_cam->Update())
+	//{
+		time(&start);
+		for (int x = _startX; x < _endX; x++)
+		{
+			for (int y = _startY; y < _endY; y++)
+			{
+				_ray = _cam->PixCood(glm::ivec2(x, y));
+				_col = (_tracer->RayTracer(_ray, 2) * 255.0f);
+
+				SDL_SetRenderDrawColor(_renderer, _col.x, _col.y, _col.z, 255);
+				SDL_RenderDrawPoint(_renderer, x, y);
+			}
+		}
+
+		
+		time(&finish);
+		std::cout << difftime(finish, start) << " seconds" << std::endl;
+	//}
+}
+
+static const int num_threads = 3;
 
 int main()
 {
-	
+
+	bool m_running = true;
 	int windowW = 800;
 	int windowH = 800;
 	SDL_Window* window;
@@ -21,17 +61,17 @@ int main()
 	window = SDL_CreateWindow("Parallel Ray Tracer",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		windowW, windowH, SDL_WINDOW_RESIZABLE);
-
 	renderer = SDL_CreateRenderer(window, -1, 0);
 
-	std::shared_ptr<Camera> cam;
-	cam = std::make_shared<Camera>(renderer, windowW, windowH);
+	std::shared_ptr<Camera> cam = std::make_shared<Camera>(renderer, windowW, windowH);
 
-	std::shared_ptr<Tracer> tracer;
-	tracer = std::make_shared<Tracer>();
+	std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();
 
 	std::shared_ptr<Ray> ray;
-	glm::vec3 col;
+	glm::vec3 col = glm::vec3(0, 0, 0) ;
+
+	std::thread t[num_threads];  //multi-threading
+
 
 	//blue
 	std::shared_ptr<Sphere> bSphere;
@@ -50,26 +90,41 @@ int main()
 	//aqua
 	std::shared_ptr<Sphere> aSphere;
 	aSphere = std::make_shared<Sphere>();
-	aSphere->SetPos( glm::vec3( windowW / 2, windowH / 2, -1.0f ) );
-	aSphere->SetCol( glm::vec3( 0, 1, 0.5f ) );
-	aSphere->SetRadi( 100.0f );
+	aSphere->SetPos(glm::vec3(windowW / 2, windowH / 2, -1.0f));
+	aSphere->SetCol(glm::vec3(0, 1, 0.5f));
+	aSphere->SetRadi(100.0f);
 
 	tracer->AddSphere(bSphere);
 	tracer->AddSphere(pSphere);
 	tracer->AddSphere(aSphere);
 
-	while (cam->Update())
-	{
-		for (int x = 0; x < windowW; x++)
-		{
-			for (int y = 0; y < windowH; y++)
-			{
-				ray = cam->PixCood(glm::ivec2(x, y));
-				col = (tracer->RayTracer(ray, 2) * 255.0f);
+	MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
+	//MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
+	//MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
+	//MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
 
-				SDL_SetRenderDrawColor(renderer, col.x, col.y, col.z, 255);
-				SDL_RenderDrawPoint(renderer, x, y);
+	//for (int i = 0; i < num_threads; i++)
+	//{
+	//	//std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, int _ windowW, int _ windowH, SDL_Renderer* _renderer
+	//	t[i] = std::thread(MultiThread, i, tracer, cam, ray, col, windowW, windowH, renderer);
+	////}
+
+	////for (int i = 0; i < num_threads; i++)
+	////{
+	//	t[i].join();
+	//}
+	
+	while (m_running)
+	{
+		SDL_Event m_event = { 0 };
+
+		while (SDL_PollEvent(&m_event))
+		{
+			if (m_event.type == SDL_QUIT)
+			{
+				m_running = false;
 			}
+
 		}
 		SDL_RenderPresent(renderer);
 	}
@@ -78,6 +133,7 @@ int main()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
+
 	return 0;
 }
-
+//https://solarianprogrammer.com/2011/12/16/cpp-11-thread-tutorial/
