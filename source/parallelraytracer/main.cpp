@@ -65,7 +65,7 @@ int main()
 			for (int y = 0; y < windowH; y++)
 			{
 				ray = cam->PixCood(glm::ivec2(x, y));
-				col = (tracer->RayTracer(ray) * 255.0f);
+				col = (tracer->RayTracer(ray, 2) * 255.0f);
 
 				SDL_SetRenderDrawColor(renderer, col.x, col.y, col.z, 255);
 				SDL_RenderDrawPoint(renderer, x, y);

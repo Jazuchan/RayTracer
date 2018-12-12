@@ -1,17 +1,18 @@
-	#ifndef TRACE_H
+#ifndef TRACE_H
 #define	TRACE_H
 
 #include <vector>
 #include <memory>
 #include <glm/glm.hpp>
 #include "Ray.h"
-#include "Geometry.h"
-#include "Sphere.h"
+
+class Geometry;
+class Sphere;
 
 class Tracer
 {
 public:
-	glm::vec3 RayTracer(std::shared_ptr<Ray> _ray);
+	glm::vec3 RayTracer(std::shared_ptr<Ray> _ray, int a);
 	void AddSphere(std::shared_ptr<Sphere> _sphere);
 
 	std::vector<std::shared_ptr<Sphere>> m_sphere;
@@ -19,7 +20,7 @@ public:
 
 
 	glm::vec3 m_col;
-	int m_reflect = 0;
+	float m_reflect;
 };
 #endif
 
