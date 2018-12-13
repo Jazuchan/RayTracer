@@ -9,11 +9,12 @@
 class Geometry;
 class Sphere;
 
+///Allows the Ray to be drawn through the scene and finds where the intersection occurs
 class Tracer
 {
 public:
-	glm::vec3 RayTracer(std::shared_ptr<Ray> _ray, int a);
-	void AddSphere(std::shared_ptr<Sphere> _sphere);
+	glm::vec3 RayTracer(std::shared_ptr<Ray> _ray, int a);  ///<
+	void AddSphere(std::shared_ptr<Sphere> _sphere);  ///<
 
 	std::vector<std::shared_ptr<Sphere>> m_sphere;
 	std::shared_ptr<Geometry> m_geo;

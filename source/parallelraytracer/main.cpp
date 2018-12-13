@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <thread>
+#include <mutex>
 
 #include "tracer/Camera.h"
 #include "tracer/Geometry.h"
@@ -10,9 +11,13 @@
 #include "tracer/Sphere.h"
 #include "tracer/Tracer.h"
 
+static const int num_threads = 3;
+std::mutex multi;  ///protects shared data from being accessed by multiple threads at the same time
+
+///Contains the loop for the multi-threads
 void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, SDL_Renderer* _renderer, int _startX, int _startY, int _endX, int _endY )
 {
-	time_t start, finish;  //time then the threading starts and finished
+	time_t start, finish;  ///holds seconds when the threading starts and finished
 
 		time(&start);
 		for (int x = _startX; x < _endX; x++)
@@ -28,10 +33,11 @@ void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<C
 		}
 	
 		time(&finish);
-		std::cout << difftime(finish, start) << " seconds" << std::endl;
+		std::cout << difftime(finish, start) << " seconds" << std::endl;  ///calculates the difference between two times
+
+		std::lock_guard<std::mutex> gaurd( multi );  ///mutex wrapper which takes ownership of the mutex
 }
 
-static const int num_threads = 3;
 
 int main()
 {
@@ -58,21 +64,21 @@ int main()
 	std::thread t[num_threads];  //multi-threading
 
 
-	//blue
+	//Blue Sphere
 	std::shared_ptr<Sphere> bSphere;
 	bSphere = std::make_shared<Sphere>();
-	bSphere->SetPos(glm::vec3(windowW / 4, windowH / 4, -1.0f));  //edit values
+	bSphere->SetPos(glm::vec3(windowW / 4, windowH / 4, -1.0f));
 	bSphere->SetCol(glm::vec3(0, 0.5f, 1));
 	bSphere->SetRadi(100.0f);
 
-	//purple
+	//Pink Sphere
 	std::shared_ptr<Sphere> pSphere;
 	pSphere = std::make_shared<Sphere>();
 	pSphere->SetPos(glm::vec3(windowW / 2, windowH / 4, -1.0f));
 	pSphere->SetCol(glm::vec3(0.5f, 0, 1));
 	pSphere->SetRadi(100.0f);
 
-	//aqua
+	//Green Sphere
 	std::shared_ptr<Sphere> aSphere;
 	aSphere = std::make_shared<Sphere>();
 	aSphere->SetPos(glm::vec3(windowW / 2, windowH / 2, -1.0f));
@@ -83,16 +89,17 @@ int main()
 	tracer->AddSphere(pSphere);
 	tracer->AddSphere(aSphere);
 
-	//multi-threading
+	//multi-threading the scene
 	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, windowW / 2, windowW / 2 );
 	MultiThread( 1, tracer, cam, ray, col, renderer, windowW/ 2, windowH/ 2,  800, 800 );
 	MultiThread( 1, tracer, cam, ray, col, renderer, 800, 800, windowW / 2, windowW / 2 );
 	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, 800, 800 );
 
+	//creates a for loop for multithreading to occur within the scene
 	for (int i = 0; i < num_threads; i++)
 	{
-		t[i] = std::thread(MultiThread, i, tracer, cam, ray, col, renderer, startX, startY, endX, endY );
-		t[i].join();
+		t[i] = std::thread(MultiThread, i, tracer, cam, ray, col, renderer, startX, startY, endX, endY ); ///accesses the MultiThread class and enables the function to be used within the loop
+		t[i].join();  ///function return when the thread has been completed
 	}
 	
 	while (m_running)
@@ -105,7 +112,6 @@ int main()
 			{
 				m_running = false;
 			}
-
 		}
 		SDL_RenderPresent(renderer);
 	}
@@ -114,7 +120,8 @@ int main()
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 
-
 	return 0;
 }
 //https://solarianprogrammer.com/2011/12/16/cpp-11-thread-tutorial/
+//https://en.cppreference.com/w/cpp/thread/mutex
+//https://en.cppreference.com/w/cpp/chrono/c/difftime

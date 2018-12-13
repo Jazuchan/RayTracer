@@ -1,10 +1,6 @@
 #include "Camera.h"
 #include "Ray.h"
 
-Camera::Camera()
-{
-
-}
 
 Camera::Camera(SDL_Renderer* _renderer, int _width, int _height)
 {
