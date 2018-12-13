@@ -12,11 +12,11 @@ Camera::Camera(SDL_Renderer* _renderer, float _width, float _height)
 
 std::shared_ptr<Ray> Camera::PixCood(glm::ivec2 _pair)
 {
-	std::shared_ptr<Ray> m_pixRay = std::make_shared<Ray>();
-	m_pixRay->m_ori.x = _pair.x;
-	m_pixRay->m_ori.y = _pair.y;
-	m_pixRay->m_ori.z = 0;
-	m_pixRay->m_dir = glm::vec3(0, 0, -1);
+	std::shared_ptr<Ray> pixRay = std::make_shared<Ray>();
+	pixRay->m_ori.x = _pair.x;
+	pixRay->m_ori.y = _pair.y;
+	pixRay->m_ori.z = 0;
+	pixRay->m_dir = glm::vec3(0, 0, -1);
 
 
 	//perspective
@@ -35,7 +35,6 @@ std::shared_ptr<Ray> Camera::PixCood(glm::ivec2 _pair)
 
 
 	glm::mat4 projMatrix = glm::perspective(glm::radians(45.0f), (float) m_windowW/ (float) m_windowH, nearPlane.z, farPlane.z);
-	//glm::mat4 projMatrix = glm::perspective(glm::radians(45.0f), (float)m_windowW / (float)m_windowH, 0.1f, 100.0f);
 
 	nearPlane = glm::inverse(projMatrix) * nearPlane; //multiply coordinates by inverse projection matrix
 	nearPlane /= nearPlane.w;  //divide coordinates by w
@@ -43,14 +42,14 @@ std::shared_ptr<Ray> Camera::PixCood(glm::ivec2 _pair)
 	farPlane = glm::inverse(projMatrix) * farPlane;
 	farPlane /= farPlane.w;
 
-	//glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3( m_windowW,  m_windowH, 1.0f));
+	//glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3( m_windowW,  m_windowH, 100.0f));
 
 	//nearPlane = glm::inverse(viewMatrix) * nearPlane;  //multiply coordinates by inverse view matrix
 	//farPlane = glm::inverse(viewMatrix) * farPlane;
 	
-	m_pixRay->m_ori = nearPlane;
-	m_pixRay->m_dir = glm::normalize(-nearPlane + farPlane);
+	pixRay->m_ori = nearPlane;
+	pixRay->m_dir = glm::normalize(-nearPlane + farPlane);
 
 
-	return m_pixRay;
+	return pixRay;
 }

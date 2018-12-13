@@ -12,21 +12,15 @@
 #include "tracer/Tracer.h"
 
 static const int num_threads = 4;
-std::mutex multi;  ///protects shared data from being accessed by multiple threads at the same time
-
-std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();
-
-//Tracer tracer;
+std::mutex multi;  ///<protects shared data from being accessed by multiple threads at the same time
+std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();  ///<enables the Tracer class to be called and generate the Spheres
 
 ///Contains the loop for the multi-threads
 void MultiThread( SDL_Renderer* _renderer, int _startX, int _startY, int _endX, int _endY )
 {
-	time_t start, finish;  ///holds seconds when the threading starts and finished
+	time_t start, finish;  //holds seconds when the threading starts and finished
 
-	//std::shared_ptr<Tracer> tracer;
-	//tracer = std::make_shared<Tracer>();
 	std::shared_ptr<Camera> cam = std::make_shared<Camera>(_renderer, 800.0f, 800.0f);
-
 
 		time(&start);
 		for (int x = _startX; x < _endX; x++)
@@ -34,7 +28,7 @@ void MultiThread( SDL_Renderer* _renderer, int _startX, int _startY, int _endX, 
 			for (int y = _startY; y < _endY; y++)
 			{
 				std::shared_ptr<Ray> ray  = cam->PixCood(glm::ivec2(x, y));
-				glm::vec3 col = (tracer->RayTracer(ray, 2) * 255.0f);
+				glm::vec3 col = (tracer->RayTracer(ray, 4) * 255.0f);
 
 				multi.lock();
 				SDL_SetRenderDrawColor(_renderer, col.x, col.y, col.z, 255);
@@ -42,11 +36,9 @@ void MultiThread( SDL_Renderer* _renderer, int _startX, int _startY, int _endX, 
 				multi.unlock();
 			}
 		}
-	
 		time(&finish);
-		std::cout << difftime(finish, start) << " seconds" << std::endl;  ///calculates the difference between two times
 
-		//std::lock_guard<std::mutex> guard( multi );  ///mutex wrapper which takes ownership of the mutex
+		std::cout << difftime(finish, start) << " seconds" << std::endl;  //calculates the difference between two times
 }
 
 
@@ -75,23 +67,63 @@ int main()
 	bSphere->SetCol(glm::vec3(0, 0.5f, 1));
 	bSphere->SetRadi(1.0f);
 
-	//Pink Sphere
+	//Purple Sphere
 	std::shared_ptr<Sphere> pSphere;
 	pSphere = std::make_shared<Sphere>();
-	pSphere->SetPos(glm::vec3(2.0f, -4.0f, 20.0f));
+	pSphere->SetPos(glm::vec3(3.0f, -4.0f, 20.0f));
 	pSphere->SetCol(glm::vec3(0.5f, 0, 1));
 	pSphere->SetRadi(1.0f);
 
-	//Green Sphere
+	//Aqua Sphere
 	std::shared_ptr<Sphere> aSphere;
 	aSphere = std::make_shared<Sphere>();
 	aSphere->SetPos(glm::vec3(-2.0f, 3.0f, 10.0f));
 	aSphere->SetCol(glm::vec3(0, 1, 0.5f));
 	aSphere->SetRadi(1.0f);
 
+	//Gold Sphere
+	std::shared_ptr<Sphere> gSphere;
+	gSphere = std::make_shared<Sphere>();
+	gSphere->SetPos(glm::vec3(0.0f, 3.0f, 20.0f));
+	gSphere->SetCol(glm::vec3(1, 1, 0.5f));
+	gSphere->SetRadi(1.0f);
+
+	//Turquiose Sphere
+	std::shared_ptr<Sphere> tSphere;
+	tSphere = std::make_shared<Sphere>();
+	tSphere->SetPos(glm::vec3(4.0f, 1.0f, 10.0f));
+	tSphere->SetCol(glm::vec3(0.5f, 1, 1));
+	tSphere->SetRadi(1.0f);
+
+	//Pink Sphere
+	std::shared_ptr<Sphere> piSphere;
+	piSphere = std::make_shared<Sphere>();
+	piSphere->SetPos(glm::vec3(-3.0f, -2.0f, 30.0f));
+	piSphere->SetCol(glm::vec3(1, 0.5f, 1));
+	piSphere->SetRadi(1.0f);
+
+	//Orange Sphere
+	std::shared_ptr<Sphere> oSphere;
+	oSphere = std::make_shared<Sphere>();
+	oSphere->SetPos(glm::vec3(-3.0f, -4.0f, 15.0f));
+	oSphere->SetCol(glm::vec3(1, 0.5f, 0));
+	oSphere->SetRadi(1.0f);
+
+	//red Sphere
+	std::shared_ptr<Sphere> rSphere;
+	rSphere = std::make_shared<Sphere>();
+	rSphere->SetPos(glm::vec3(3.0f, 4.0f, 15.0f));
+	rSphere->SetCol(glm::vec3(1, 0, 0));
+	rSphere->SetRadi(1.0f);
+
 	tracer->AddSphere(pSphere);
 	tracer->AddSphere(bSphere);
 	tracer->AddSphere(aSphere);
+	tracer->AddSphere(gSphere);
+	tracer->AddSphere(tSphere);
+	tracer->AddSphere(piSphere);
+	tracer->AddSphere(oSphere);
+	tracer->AddSphere(rSphere);
 
 	//multi-threading the scene
 	//MultiThread( renderer, 0, 0, 800, 800 );  //whole scene
