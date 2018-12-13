@@ -14,7 +14,6 @@ class Ray;
 class Camera
 {
 public:
-	
 	Camera(SDL_Renderer* _renderer, float _width, float _height);  ///< contains the matrix calculations
 
 	std::shared_ptr<Ray> PixCood(glm::ivec2 _pair);  ///<  takes in the pixel coordinates for the Ray

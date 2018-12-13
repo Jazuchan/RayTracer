@@ -5,7 +5,7 @@ glm::vec3 Sphere::Shading(std::shared_ptr<Ray> _ray, Tracer& _tracer, glm::vec3(
 {
 	glm::vec3 m_col = GetCol();
 	glm::vec3 m_lightDir = { -1.0f, -1.0f, -1.0f };  //directional light
-	glm::vec3 m_lightPoint = glm::vec3( 0, 0, 50 ) - _intersect; //point light
+	glm::vec3 m_lightPoint = glm::vec3( 0, 50, 50 ) - _intersect; //point light
 	glm::vec3 m_lightCol = { 1.0f, 1.0f, 1.0f };
 	glm::vec3 m_surfNormal = glm::normalize(_intersect - m_pos);
 

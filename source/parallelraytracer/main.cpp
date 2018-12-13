@@ -11,41 +11,51 @@
 #include "tracer/Sphere.h"
 #include "tracer/Tracer.h"
 
-static const int num_threads = 3;
+static const int num_threads = 4;
 std::mutex multi;  ///protects shared data from being accessed by multiple threads at the same time
 
+std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();
+
+//Tracer tracer;
+
 ///Contains the loop for the multi-threads
-void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, SDL_Renderer* _renderer, int _startX, int _startY, int _endX, int _endY )
+void MultiThread( SDL_Renderer* _renderer, int _startX, int _startY, int _endX, int _endY )
 {
 	time_t start, finish;  ///holds seconds when the threading starts and finished
+
+	//std::shared_ptr<Tracer> tracer;
+	//tracer = std::make_shared<Tracer>();
+	std::shared_ptr<Camera> cam = std::make_shared<Camera>(_renderer, 800.0f, 800.0f);
+
 
 		time(&start);
 		for (int x = _startX; x < _endX; x++)
 		{
 			for (int y = _startY; y < _endY; y++)
 			{
-				_ray = _cam->PixCood(glm::ivec2(x, y));
-				_col = (_tracer->RayTracer(_ray, 2) * 255.0f);
+				std::shared_ptr<Ray> ray  = cam->PixCood(glm::ivec2(x, y));
+				glm::vec3 col = (tracer->RayTracer(ray, 2) * 255.0f);
 
-				SDL_SetRenderDrawColor(_renderer, _col.x, _col.y, _col.z, 255);
+				multi.lock();
+				SDL_SetRenderDrawColor(_renderer, col.x, col.y, col.z, 255);
 				SDL_RenderDrawPoint(_renderer, x, y);
+				multi.unlock();
 			}
 		}
 	
 		time(&finish);
 		std::cout << difftime(finish, start) << " seconds" << std::endl;  ///calculates the difference between two times
 
-		std::lock_guard<std::mutex> gaurd( multi );  ///mutex wrapper which takes ownership of the mutex
+		//std::lock_guard<std::mutex> guard( multi );  ///mutex wrapper which takes ownership of the mutex
 }
 
 
 int main()
 {
-
 	bool m_running = true;
 	float windowW = 800.0f;
 	float windowH = 800.0f;
-	int startX, startY, endX, endY = 0;
+	
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
@@ -53,16 +63,10 @@ int main()
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		windowW, windowH, SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, 0);
-
-	std::shared_ptr<Camera> cam = std::make_shared<Camera>(renderer, windowW, windowH);
-
-	std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();
-
-	std::shared_ptr<Ray> ray;
-	glm::vec3 col = glm::vec3(0, 0, 0);
+	   
 
 	std::thread t[num_threads];  //multi-threading
-
+	//std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();
 
 	//Blue Sphere
 	std::shared_ptr<Sphere> bSphere;
@@ -90,19 +94,25 @@ int main()
 	tracer->AddSphere(aSphere);
 
 	//multi-threading the scene
-	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, windowW / 2, windowW / 2 );  //top left
-	MultiThread( 1, tracer, cam, ray, col, renderer, windowW/ 2, windowH/ 2,  800, 800 );  //bottom right
-	MultiThread( 1, tracer, cam, ray, col, renderer, windowW / 2, 0, 800, windowH / 2); //top right
-	MultiThread( 1, tracer, cam, ray, col, renderer, 0, windowH / 2, windowW / 2, 800);  //bottom left
-	//MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, 800, 800 );  //whole scene
+	//MultiThread( renderer, 0, 0, 800, 800 );  //whole scene
 
-	//creates a for loop for multithreading to occur within the scene
-	for (int i = 0; i < num_threads; i++)
+	std::vector<std::thread> sickthreads;
+	
+	for (int x = 0; x < windowW; x += windowW / 2)
 	{
-		t[i] = std::thread(MultiThread, i, tracer, cam, ray, col, renderer, startX, startY, endX, endY ); ///accesses the MultiThread class and enables the function to be used within the loop
-		t[i].join();  ///function return when the thread has been completed
+		for (int y = 0; y < windowH; y += windowH / 2)
+		{
+			sickthreads.push_back(std::thread(MultiThread, renderer, x, y, x + (windowW / 2), y + (windowH / 2)));
+		}
 	}
 	
+	for (size_t i = 0; i < sickthreads.size(); i++) 
+	{
+		sickthreads.at(i).join(); 
+	}
+	sickthreads.clear();
+
+
 	//without multithreading
 		//for (int x = 0; x < 800; x++)
 		//{
