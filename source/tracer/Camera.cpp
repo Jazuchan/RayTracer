@@ -8,53 +8,40 @@ Camera::Camera()
 
 Camera::Camera(SDL_Renderer* _renderer, int _width, int _height)
 {
-	//m_viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3));
-	//m_projectionMatrix = glm::perspective(45.0f, 1.0f, 0.1f, 10000.0f);
-
-	//m_viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3));
 
 	m_renderer = _renderer;
 	m_windowW = _width;
 	m_windowH = _height;
-
-}
-
-//bool Camera::Update()
-//{
-//	SceneCol();//0, 255, 200);
-//
-//	
-//	m_deltaTime = (float)(m_curr - m_lastTime) / 1000.0f;
-//	m_lastTime = m_curr;
-//		
-//
-//	return true;
-//}
-
-void Camera::SceneCol()//int _red, int _green, int _blue)
-{
-	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-	SDL_RenderClear(m_renderer);
+	
 }
 
 std::shared_ptr<Ray> Camera::PixCood(glm::ivec2 _pair)
 {
-	m_pixRay = std::make_shared<Ray>();
-
+	std::shared_ptr<Ray> m_pixRay = std::make_shared<Ray>();
 	m_pixRay->m_ori.x = _pair.x;
 	m_pixRay->m_ori.y = _pair.y;
 	m_pixRay->m_ori.z = 0;
-	//m_pixRay->m_ori = glm::vec3(_pair.x, _pair.y, 0);
 	m_pixRay->m_dir = glm::vec3(0, 0, -1);
-			 
-	/*m_pixRay->m_dir = glm::vec3(glm::perspective(45.0f, 1.0f, 0.1f, 1.0f) * glm::vec4(m_pixRay->m_dir, 1));
-	m_pixRay->m_ori = glm::vec3(glm::perspective(45.0f, 1.0f, 0.1f, 1.0f) * glm::vec4(m_pixRay->m_ori, 1));
-*/
-	return m_pixRay; //std::make_shared<Ray>();
-}
+			
+	//perspective
+	glm::vec3 nearPlane;
+	glm::vec3 farPlane;
 
-//void Camera::PixCood(glm::ivec2 _pair)
-//{
-//	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
-//	SDL_RenderDrawPoint(m_renderer, _pair.x, _pair.y);
-//}
+	//float nearPlane;
+	//float farPlane;
+
+	nearPlane.x = -1.0f;
+	nearPlane.y = 1.0f;
+	nearPlane.z = -1.0f;
+
+	farPlane.x = -1.0f;
+	farPlane.y = 1.0f;
+	farPlane.z = 1.0f;
+
+	glm::mat4 prespective = /*(float) glm::inverse*/ glm::perspective( 0.0f, 0.0f, nearPlane.z, farPlane.z );
+	//m_viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3));
+
+	//m_viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3));
+
+	return m_pixRay;
+}

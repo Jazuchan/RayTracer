@@ -10,24 +10,10 @@
 #include "tracer/Sphere.h"
 #include "tracer/Tracer.h"
 
-// Pass in the sections of the screen to draw (E.G. 0, 0, ScreenWidth / 2, ScreenHeight / 2)
-//void Dud( int _startY, int , int _endY)
-//{
-//	for (int x = _startX; x < _endX; x++)
-//	{
-//		for (int y = _startY; y < _endY; y++)
-//		{
-//			// Draw
-//		}
-//	}
-//}
-
-void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, int _endX, int _endY, SDL_Renderer* _renderer, int _startX, int _startY)
+void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, SDL_Renderer* _renderer, int _startX, int _startY, int _endX, int _endY )
 {
 	time_t start, finish;  //time then the threading starts and finished
 
-	//while (_cam->Update())
-	//{
 		time(&start);
 		for (int x = _startX; x < _endX; x++)
 		{
@@ -40,11 +26,9 @@ void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<C
 				SDL_RenderDrawPoint(_renderer, x, y);
 			}
 		}
-
-		
+	
 		time(&finish);
 		std::cout << difftime(finish, start) << " seconds" << std::endl;
-	//}
 }
 
 static const int num_threads = 3;
@@ -55,6 +39,7 @@ int main()
 	bool m_running = true;
 	int windowW = 800;
 	int windowH = 800;
+	int startX, startY, endX, endY = 0;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
@@ -98,21 +83,17 @@ int main()
 	tracer->AddSphere(pSphere);
 	tracer->AddSphere(aSphere);
 
-	MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
-	//MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
-	//MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
-	//MultiThread( 1, tracer, cam, ray, col, windowW/ 2, windowH/ 2, renderer, 0, 0);
+	//multi-threading
+	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, windowW / 2, windowW / 2 );
+	MultiThread( 1, tracer, cam, ray, col, renderer, windowW/ 2, windowH/ 2,  800, 800 );
+	MultiThread( 1, tracer, cam, ray, col, renderer, 800, 800, windowW / 2, windowW / 2 );
+	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, 800, 800 );
 
-	//for (int i = 0; i < num_threads; i++)
-	//{
-	//	//std::shared_ptr<Tracer> _tracer, std::shared_ptr<Camera> _cam, std::shared_ptr<Ray> _ray, glm::vec3 _col, int _ windowW, int _ windowH, SDL_Renderer* _renderer
-	//	t[i] = std::thread(MultiThread, i, tracer, cam, ray, col, windowW, windowH, renderer);
-	////}
-
-	////for (int i = 0; i < num_threads; i++)
-	////{
-	//	t[i].join();
-	//}
+	for (int i = 0; i < num_threads; i++)
+	{
+		t[i] = std::thread(MultiThread, i, tracer, cam, ray, col, renderer, startX, startY, endX, endY );
+		t[i].join();
+	}
 	
 	while (m_running)
 	{
