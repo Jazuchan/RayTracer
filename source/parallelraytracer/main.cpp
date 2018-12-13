@@ -35,7 +35,7 @@ void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<C
 		time(&finish);
 		std::cout << difftime(finish, start) << " seconds" << std::endl;  ///calculates the difference between two times
 
-		std::lock_guard<std::mutex> gaurd( multi );  ///mutex wrapper which takes ownership of the mutex
+		//std::lock_guard<std::mutex> gaurd( multi );  ///mutex wrapper which takes ownership of the mutex
 }
 
 
@@ -43,8 +43,8 @@ int main()
 {
 
 	bool m_running = true;
-	int windowW = 800;
-	int windowH = 800;
+	float windowW = 800.0f;
+	float windowH = 800.0f;
 	int startX, startY, endX, endY = 0;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -67,22 +67,22 @@ int main()
 	//Blue Sphere
 	std::shared_ptr<Sphere> bSphere;
 	bSphere = std::make_shared<Sphere>();
-	bSphere->SetPos(glm::vec3(windowW / 4, windowH / 4, -1.0f));
-	bSphere->SetCol(glm::vec3(0, 0.5f, 1));
+	bSphere->SetPos(glm::vec3(windowW / 4, windowH / 4, -4.0f));
+	bSphere->SetCol(glm::vec3(0, 0, 1));
 	bSphere->SetRadi(100.0f);
 
 	//Pink Sphere
 	std::shared_ptr<Sphere> pSphere;
 	pSphere = std::make_shared<Sphere>();
 	pSphere->SetPos(glm::vec3(windowW / 2, windowH / 4, -1.0f));
-	pSphere->SetCol(glm::vec3(0.5f, 0, 1));
+	pSphere->SetCol(glm::vec3(1, 0, 0));
 	pSphere->SetRadi(100.0f);
 
 	//Green Sphere
 	std::shared_ptr<Sphere> aSphere;
 	aSphere = std::make_shared<Sphere>();
-	aSphere->SetPos(glm::vec3(windowW / 2, windowH / 2, -1.0f));
-	aSphere->SetCol(glm::vec3(0, 1, 0.5f));
+	aSphere->SetPos(glm::vec3(400, 400, -7.0f));
+	aSphere->SetCol(glm::vec3(0, 1, 0));
 	aSphere->SetRadi(100.0f);
 
 	tracer->AddSphere(bSphere);
@@ -90,10 +90,11 @@ int main()
 	tracer->AddSphere(aSphere);
 
 	//multi-threading the scene
-	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, windowW / 2, windowW / 2 );
-	MultiThread( 1, tracer, cam, ray, col, renderer, windowW/ 2, windowH/ 2,  800, 800 );
-	MultiThread( 1, tracer, cam, ray, col, renderer, 800, 800, windowW / 2, windowW / 2 );
-	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, 800, 800 );
+	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, windowW / 2, windowW / 2 );  //top left
+	MultiThread( 1, tracer, cam, ray, col, renderer, windowW/ 2, windowH/ 2,  800, 800 );  //bottom right
+	MultiThread( 1, tracer, cam, ray, col, renderer, windowW / 2, 0, 800, windowH / 2); //top right
+	MultiThread(1, tracer, cam, ray, col, renderer, 0, windowH / 2, windowW / 2, 800);  //bottom left
+	//MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, 800, 800 );  //whole scene
 
 	//creates a for loop for multithreading to occur within the scene
 	for (int i = 0; i < num_threads; i++)

@@ -9,7 +9,7 @@ class Ray
 {
 public:
 
-	glm::vec3 m_ori;  ///origin of the ray
+	glm::vec3 m_ori{-1, 1, 0 };  ///origin of the ray
 	glm::vec3 m_dir;  ///direction of the ray
 };
 

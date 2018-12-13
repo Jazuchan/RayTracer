@@ -15,12 +15,12 @@ class Camera
 {
 public:
 	
-	Camera(SDL_Renderer* _renderer, int _width, int _height);  ///< contains the matrix calculations
+	Camera(SDL_Renderer* _renderer, float _width, float _height);  ///< contains the matrix calculations
 
 	std::shared_ptr<Ray> PixCood(glm::ivec2 _pair);  ///<  takes in the pixel coordinates for the Ray
 		
-	int m_windowW = 800;
-	int m_windowH = 800;
+	int m_windowW = 800.0f;
+	int m_windowH = 800.0f;
 	SDL_Renderer* m_renderer;
 
 };
