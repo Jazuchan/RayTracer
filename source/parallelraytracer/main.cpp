@@ -35,7 +35,7 @@ void MultiThread(int _thread, std::shared_ptr<Tracer> _tracer, std::shared_ptr<C
 		time(&finish);
 		std::cout << difftime(finish, start) << " seconds" << std::endl;  ///calculates the difference between two times
 
-		//std::lock_guard<std::mutex> gaurd( multi );  ///mutex wrapper which takes ownership of the mutex
+		std::lock_guard<std::mutex> gaurd( multi );  ///mutex wrapper which takes ownership of the mutex
 }
 
 
@@ -59,7 +59,7 @@ int main()
 	std::shared_ptr<Tracer> tracer = std::make_shared<Tracer>();
 
 	std::shared_ptr<Ray> ray;
-	glm::vec3 col = glm::vec3(0, 0, 0) ;
+	glm::vec3 col = glm::vec3(0, 0, 0);
 
 	std::thread t[num_threads];  //multi-threading
 
@@ -67,33 +67,33 @@ int main()
 	//Blue Sphere
 	std::shared_ptr<Sphere> bSphere;
 	bSphere = std::make_shared<Sphere>();
-	bSphere->SetPos(glm::vec3(windowW / 4, windowH / 4, -4.0f));
-	bSphere->SetCol(glm::vec3(0, 0, 1));
-	bSphere->SetRadi(100.0f);
+	bSphere->SetPos(glm::vec3(0.0f, 0.0f, 30.0f));
+	bSphere->SetCol(glm::vec3(0, 0.5f, 1));
+	bSphere->SetRadi(1.0f);
 
 	//Pink Sphere
 	std::shared_ptr<Sphere> pSphere;
 	pSphere = std::make_shared<Sphere>();
-	pSphere->SetPos(glm::vec3(windowW / 2, windowH / 4, -1.0f));
-	pSphere->SetCol(glm::vec3(1, 0, 0));
-	pSphere->SetRadi(100.0f);
+	pSphere->SetPos(glm::vec3(2.0f, -4.0f, 20.0f));
+	pSphere->SetCol(glm::vec3(0.5f, 0, 1));
+	pSphere->SetRadi(1.0f);
 
 	//Green Sphere
 	std::shared_ptr<Sphere> aSphere;
 	aSphere = std::make_shared<Sphere>();
-	aSphere->SetPos(glm::vec3(400, 400, -7.0f));
-	aSphere->SetCol(glm::vec3(0, 1, 0));
-	aSphere->SetRadi(100.0f);
+	aSphere->SetPos(glm::vec3(-2.0f, 3.0f, 10.0f));
+	aSphere->SetCol(glm::vec3(0, 1, 0.5f));
+	aSphere->SetRadi(1.0f);
 
-	tracer->AddSphere(bSphere);
 	tracer->AddSphere(pSphere);
+	tracer->AddSphere(bSphere);
 	tracer->AddSphere(aSphere);
 
 	//multi-threading the scene
 	MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, windowW / 2, windowW / 2 );  //top left
 	MultiThread( 1, tracer, cam, ray, col, renderer, windowW/ 2, windowH/ 2,  800, 800 );  //bottom right
 	MultiThread( 1, tracer, cam, ray, col, renderer, windowW / 2, 0, 800, windowH / 2); //top right
-	MultiThread(1, tracer, cam, ray, col, renderer, 0, windowH / 2, windowW / 2, 800);  //bottom left
+	MultiThread( 1, tracer, cam, ray, col, renderer, 0, windowH / 2, windowW / 2, 800);  //bottom left
 	//MultiThread( 1, tracer, cam, ray, col, renderer, 0, 0, 800, 800 );  //whole scene
 
 	//creates a for loop for multithreading to occur within the scene
@@ -103,6 +103,19 @@ int main()
 		t[i].join();  ///function return when the thread has been completed
 	}
 	
+	//without multithreading
+		//for (int x = 0; x < 800; x++)
+		//{
+		//	for (int y = 0; y < 800; y++)
+		//	{
+		//		ray = cam->PixCood(glm::ivec2(x, y));
+		//		col = (tracer->RayTracer(ray, 2) * 255.0f);
+
+		//		SDL_SetRenderDrawColor(renderer, col.x, col.y, col.z, 255);
+		//		SDL_RenderDrawPoint(renderer, x, y);
+		//	}
+		//}
+
 	while (m_running)
 	{
 		SDL_Event m_event = { 0 };
@@ -114,6 +127,7 @@ int main()
 				m_running = false;
 			}
 		}
+
 		SDL_RenderPresent(renderer);
 	}
 

@@ -4,26 +4,25 @@
 glm::vec3 Sphere::Shading(std::shared_ptr<Ray> _ray, Tracer& _tracer, glm::vec3(_intersect), int a)
 {
 	glm::vec3 m_col = GetCol();
-	glm::vec3 m_lightDir = { 0.0f, -1.0f, 1.0f };  //directional light
-	glm::vec3 m_lightPoint = glm::vec3( 600, 750, 0 ) - _intersect; //point light
+	glm::vec3 m_lightDir = { -1.0f, -1.0f, -1.0f };  //directional light
+	glm::vec3 m_lightPoint = glm::vec3( 0, 0, 50 ) - _intersect; //point light
 	glm::vec3 m_lightCol = { 1.0f, 1.0f, 1.0f };
+	glm::vec3 m_surfNormal = glm::normalize(_intersect - m_pos);
 
 	float m_specIntense = 1.0f;
 
 	//ambient
 	glm::vec3 ambientCol = glm::vec3(1.0f, 0.0f, 0.0f);
 	float m_ambistrength = 0.1f;
-	glm::vec3 m_ambient = ambientCol * m_col;
+	glm::vec3 m_ambient = ambientCol * m_ambistrength;
 
 	//diffuse
 	m_lightDir = glm::normalize( m_lightDir );
-	glm::vec3 m_surfNormal = glm::normalize(_intersect - m_pos);
 	float m_diffuseCol = glm::max(glm::dot( m_lightDir, m_surfNormal), 0.0f);
 
 	//diffuse2
 	m_lightPoint = glm::normalize( m_lightPoint );
-	glm::vec3 m_surfNormal2 = glm::normalize( _intersect - m_pos );
-	float m_diffuseCol2 = glm::max( glm::dot( m_lightPoint, m_surfNormal2 ), 0.0f );
+	float m_diffuseCol2 = glm::max( glm::dot( m_lightPoint, m_surfNormal ), 0.0f );
 
 	//specular
 	glm::vec3 m_reflect = glm::reflect( -m_lightDir, m_surfNormal );
@@ -57,7 +56,7 @@ glm::vec3 Sphere::Shading(std::shared_ptr<Ray> _ray, Tracer& _tracer, glm::vec3(
 
 
 	//glm::vec3 m_hitCol = ( m_diffuseCol +  m_specularCol + m_ambient ) * m_lightCol * m_col + reflecCol + shadowCol;  //casts light to the scene
-	glm::vec3 m_hitCol = ( m_diffuseCol + m_diffuseCol2 + m_specularCol + m_specularCol2 + m_ambient ) * m_lightCol * m_col + reflecCol + shadowCol;  //casts light to the scene
+	glm::vec3 m_hitCol = (m_diffuseCol + m_diffuseCol2 + m_specularCol + m_specularCol2 + m_ambient) * m_lightCol * m_col + reflecCol;// + shadowCol;  //casts light to the scene
 
 	return glm::clamp(m_hitCol, glm::vec3(0), glm::vec3(1));
 }
