@@ -7,24 +7,20 @@
 #include "Ray.h"
 #include "Sphere.h"
 
-///
+///Intersect contains the values for when an intersection occurs
 struct Intersect
 {
 	bool m_hit = false;
-	float m_disToHit;
-	glm::vec3 m_intersectPoint;
+	float m_disToHit;  //distance till intersected
+	glm::vec3 m_intersectPoint;  ///<the point where the ray hits in 3D space
 
 };
 
-///
+///Geometry stores the information for if the rays have been cast and what happens when they hit
 class Geometry
 {
 
 public:
-
-	glm::vec3 Point(std::shared_ptr<Ray> _ray, glm::vec3 _point);  ///<
-	Intersect RayIntersect(std::shared_ptr<Ray> _ray, glm::vec3 _cen, float _radi);  ///<
-	glm::vec3 GetRayInter(float _a, float _b, glm::vec3 _c);  ///<
-
+	Intersect RayIntersect(std::shared_ptr<Ray> _ray, glm::vec3 _cen, float _radi);  ///<takes in a ray, vector 3 and float to calculate the intersection
 };
 #endif

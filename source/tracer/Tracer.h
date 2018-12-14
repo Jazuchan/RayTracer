@@ -9,25 +9,16 @@
 class Geometry;
 class Sphere;
 
-///Allows the Ray to be drawn through the scene and finds where the intersection occurs
+///Allows the Ray to be drawn through the scene and finds where the intersection occurs creates the Sphere
 class Tracer
 {
 public:
-	glm::vec3 RayTracer(std::shared_ptr<Ray> _ray, int a);  ///<
-	void AddSphere(std::shared_ptr<Sphere> _sphere);  ///<
+	glm::vec3 RayTracer(std::shared_ptr<Ray> _ray, int a);  ///< passes in a ray and int for the when creating the rays and number of bounces which occurs between objects in a scene
+	void AddSphere(std::shared_ptr<Sphere> _sphere);  ///<  enables Spheres to be drawn to the scene
 
-	std::vector<std::shared_ptr<Sphere>> m_sphere;
-	std::shared_ptr<Geometry> m_geo;
+	std::vector<std::shared_ptr<Sphere>> m_sphere; ///<  creates a shared pointer to access Sphere
+	std::shared_ptr<Geometry> m_geo;  ///<  creates a shared pointer to access Geometry
 
-
-	glm::vec3 m_col;
-	float m_reflect;
 };
 #endif
 
-//https://github.com/JamieAgate/BasicRayTracer/tree/master/CGG_GFX_Framework
-//https://github.com/MarcusMathiassen/BasicRaytracer30min/blob/master/basic_raytracer.cpp?fbclid=IwAR2va6GSQ1BCW6CxhfhfjNqrdIjrtiGJs34cCBxTbRF2HcZVXBUVEZbDXck
-//https://www.youtube.com/watch?v=RIgc5J_ZGu8&list=PLAqGIYgEAxrUO6ODA0pnLkM2UOijerFPv
-//https://www.youtube.com/watch?v=ARn_yhgk7aE
-//https://github.com/Hillsoft/Raytracer-Tutorial/tree/master/RayTutNew
-//https://github.com/TyrrellMaye-Smith/ParallelRayTracing/tree/master/src

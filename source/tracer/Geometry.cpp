@@ -1,55 +1,37 @@
 #include "Geometry.h"
 
-glm::vec3 Geometry::Point(std::shared_ptr<Ray> _ray, glm::vec3 _point)
-{
-	glm::vec3 m_ori = _ray->m_ori;
-
-	glm::vec3 m_dir = _ray->m_dir;
-
-	float m_project = glm::dot(_point - m_ori, m_dir);
-	glm::vec3 m_x = m_ori + (m_project * m_dir);
-	
-	return m_x;
-}
-
-glm::vec3 Geometry::GetRayInter(float _a, float _b, glm::vec3 _c)
-{
-	return (_c - _a) / (_b - _a);
-}
-
 Intersect Geometry::RayIntersect(std::shared_ptr<Ray> _ray, glm::vec3 _cen, float _radi)
 {
-	Intersect m_hit1;
+	Intersect hit;
 
 	//a
-	glm::vec3 m_ori = _ray->m_ori;
+	glm::vec3 ori = _ray->m_ori;  //the rays origin is initialised as the origin of the ray intersection
 
 	//n
-	glm::vec3 m_dir = _ray->m_dir;
+	glm::vec3 dir = _ray->m_dir;  //the rays direction is initialised as the direction of the ray intersection
 
 	//p-a
-	glm::vec3 m_oriCen = _cen - _ray->m_ori;
-
+	glm::vec3 oriCen = _cen - _ray->m_ori;  //the centre of the origin is created by subtracting the passes in centre with the rays origin
 
 	//((p-a).n)
-	float m_project = glm::dot(m_oriCen, m_dir);
+	float project = glm::dot(oriCen, dir);  //the rays projection is created through the dot product of the centre of the origin and the direction
 
 	//d
-	float m_dis = glm::length(m_oriCen - (m_project) * m_dir);
+	float dis = glm::length(oriCen - (project) * dir); //calculates the distance between the centre of the origin and the projection direction
 
-	if (m_dis > _radi)
+	if (dis > _radi)  //if the distance is greater than the radius
 	{
-		return m_hit1;
+		return hit;
 	}
 	else
 	{
-			float m_x2 = sqrt(pow(_radi, 2) - pow(m_dis, 2));
+			float x = sqrt(pow(_radi, 2) - pow(dis, 2));  //the square root of the power of the radius and the distance
 
-			m_hit1.m_disToHit = m_project - m_x2;
-			m_hit1.m_intersectPoint = m_ori + m_hit1.m_disToHit * m_dir;
-			m_hit1.m_hit = true;
+			hit.m_disToHit = project - x;  //the distance till intersection occur is x subtracted by the projection of the ray
+			hit.m_intersectPoint = ori + hit.m_disToHit * dir;  //the intersection point is the origin of the ray, plus the distance till it intersects multiplied by the distance
+			hit.m_hit = true;
 
-			return m_hit1;
+			return hit;
 
 	}
 
